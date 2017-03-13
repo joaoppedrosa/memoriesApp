@@ -1,5 +1,7 @@
 package com.jpp.memories.ui;
 
+import android.content.res.Resources;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -9,46 +11,42 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.jpp.memories.MemoriesApplication;
 import com.jpp.memories.R;
+import com.jpp.memories.core.MemoriesManager;
+import com.jpp.memories.core.Navigator;
+import com.jpp.memories.databinding.ActivityMainBinding;
+import com.jpp.memories.databinding.ContentMainBinding;
+import com.jpp.memories.model.Memories;
+import com.jpp.memories.ui.vm.MainActivityVM;
+
+import javax.inject.Inject;
 
 public class MainActivity extends AppCompatActivity {
+
+    @Inject
+    Resources resources;
+    @Inject
+    MemoriesManager memoriesManager;
+
+    private ActivityMainBinding activityMainBinding;
+    private MainActivityVM mainActivityVM;
+    private Navigator navigator;
+    private ContentMainBinding contentMainBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        MemoriesApplication.getApplicationComponent().inject(this);
+        this.activityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        this.contentMainBinding = activityMainBinding.content;
+        this.navigator = new Navigator(this);
+        this.mainActivityVM = new MainActivityVM(this.navigator, this.resources, this.memoriesManager);
+        this.activityMainBinding.setMainVM(this.mainActivityVM);
+        init();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+    private void init() {
+        setSupportActionBar(this.activityMainBinding.toolbar);
     }
 }

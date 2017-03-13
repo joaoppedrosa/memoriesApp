@@ -3,4 +3,5 @@
     <string name="action_settings">Settings</string>
     <string name="slogan">Save and share your memories</string>
     <string name="logo">logo</string>
+    <string name="error_server">Please try again later...</string>
 </resources>
