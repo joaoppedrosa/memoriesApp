@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="splashVM"
+            type="com.jpp.memories.ui.vm.SplashActivityVM" />
+    </data>
+
+    <RelativeLayout xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.jpp.memories.ui.SplashActivity">
+
+        <TextView
+            android:id="@+id/main_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:text="@{splashVM.appName}"
+            android:textAllCaps="true"
+            android:textSize="26sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/main_title"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="25dp"
+            android:contentDescription="@string/logo" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/main_title"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="25dp"
+            android:text="@{splashVM.appSlogan}" />
+    </RelativeLayout>
+</layout>
