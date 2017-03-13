@@ -28,7 +28,7 @@ public class MemoriesAPI {
     }
 
     public interface MemoriesAPInterface {
-        @GET("/v3/search/images?fields=id,title,thumb,referral_destinations&sort_order=best")
+        @GET("/v3/search/images?fields=id,title,comp,thumb,referral_destinations&sort_order=best")
         Observable<Memories> getMemories(@Header("Api-Key") String apiKey, @Query("phrase") String key);
     }
 

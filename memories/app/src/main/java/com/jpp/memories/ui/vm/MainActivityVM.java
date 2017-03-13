@@ -3,18 +3,17 @@ package com.jpp.memories.ui.vm;
 import android.content.res.Resources;
 import android.databinding.BaseObservable;
 import android.databinding.ObservableArrayList;
-import android.databinding.ObservableField;
 import android.databinding.ObservableList;
 import android.support.annotation.NonNull;
 
 import com.android.databinding.library.baseAdapters.BR;
-import com.jpp.memories.R;
 import com.jpp.memories.api.APICallback;
 import com.jpp.memories.core.MemoriesManager;
 import com.jpp.memories.core.Navigator;
 import com.jpp.memories.model.Image;
 import com.jpp.memories.model.Memories;
-import com.jpp.memories.utils.StringsUtils;
+import com.jpp.memories.model.Memory;
+import com.jpp.memories.ui.adapter.MemoriesAdapter;
 
 import java.util.List;
 
@@ -27,26 +26,20 @@ import static com.jpp.memories.utils.LogUtils.error;
 
 public class MainActivityVM extends BaseObservable implements APICallback<Memories> {
 
+    private MemoriesAdapter memoriesAdapter;
     private Navigator navigator;
     private MemoriesManager memoriesManager;
     private Resources resources;
-
-    private ObservableField<String> message;
-    private ObservableList<Image> memoriesList;
+    private IMainObserver mainObserver;
+    private ObservableList<Memory> memoriesList;
 
     public MainActivityVM(@NonNull Navigator navigator, @NonNull Resources resources, @NonNull MemoriesManager memoriesManager) {
         this.navigator = navigator;
         this.resources = resources;
         this.memoriesManager = memoriesManager;
         this.memoriesList = new ObservableArrayList<>();
-        this.message = new ObservableField<>();
         this.memoriesManager.getMemories(this);
     }
-
-    public void addValue() {
-
-    }
-
 
     public void onCreateMemoriesClick() {
         this.navigator.goToCreateMemoriesActivity();
@@ -58,15 +51,13 @@ public class MainActivityVM extends BaseObservable implements APICallback<Memori
 
     private void setMemoriesList(List<Image> memoriesList) {
         for (Image image : memoriesList) {
-            this.memoriesList.add(image);
+            String img = image.getDisplaySizes().get(0).getUri();
+            String quote = image.getTitle();
+            this.memoriesList.add(new Memory(quote, img));
         }
 
+        this.memoriesAdapter.notifyDataSetChanged();
         notifyPropertyChanged(BR.mainVM);
-    }
-
-    public void setMessage(String message) {
-        this.message.set(message);
-        this.message.notifyChange();
     }
 
     @Override
@@ -95,6 +86,23 @@ public class MainActivityVM extends BaseObservable implements APICallback<Memori
 
     @Override
     public void onComplete() {
+        this.mainObserver.onRequestComplete();
         debug("onComplete");
+    }
+
+    public ObservableList<Memory> getMemoriesList() {
+        return memoriesList;
+    }
+
+    public void setMemoriesAdapter(MemoriesAdapter memoriesAdapter) {
+        this.memoriesAdapter = memoriesAdapter;
+    }
+
+    public void subscribeObserver(IMainObserver mainObserver) {
+        this.mainObserver = mainObserver;
+    }
+
+    public interface IMainObserver {
+        void onRequestComplete();
     }
 }

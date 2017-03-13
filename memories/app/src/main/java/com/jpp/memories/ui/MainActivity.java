@@ -6,11 +6,14 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.gson.Gson;
+import com.jpp.memories.BR;
 import com.jpp.memories.MemoriesApplication;
 import com.jpp.memories.R;
 import com.jpp.memories.core.MemoriesManager;
@@ -18,21 +21,27 @@ import com.jpp.memories.core.Navigator;
 import com.jpp.memories.databinding.ActivityMainBinding;
 import com.jpp.memories.databinding.ContentMainBinding;
 import com.jpp.memories.model.Memories;
+import com.jpp.memories.model.Memory;
+import com.jpp.memories.ui.adapter.MemoriesAdapter;
 import com.jpp.memories.ui.vm.MainActivityVM;
 
 import javax.inject.Inject;
 
-public class MainActivity extends AppCompatActivity {
+import static com.jpp.memories.utils.LogUtils.debug;
+
+public class MainActivity extends AppCompatActivity implements MemoriesAdapter.OnRecyclerViewItemClickListener, MainActivityVM.IMainObserver {
 
     @Inject
     Resources resources;
     @Inject
     MemoriesManager memoriesManager;
+    @Inject
+    Gson gson;
 
     private ActivityMainBinding activityMainBinding;
     private MainActivityVM mainActivityVM;
-    private Navigator navigator;
     private ContentMainBinding contentMainBinding;
+    private Navigator navigator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,11 +51,40 @@ public class MainActivity extends AppCompatActivity {
         this.contentMainBinding = activityMainBinding.content;
         this.navigator = new Navigator(this);
         this.mainActivityVM = new MainActivityVM(this.navigator, this.resources, this.memoriesManager);
+        this.mainActivityVM.subscribeObserver(this);
         this.activityMainBinding.setMainVM(this.mainActivityVM);
         init();
     }
 
     private void init() {
         setSupportActionBar(this.activityMainBinding.toolbar);
+        this.contentMainBinding.recyclerView.setHasFixedSize(true);
+        this.contentMainBinding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        MemoriesAdapter memoriesAdapter = new MemoriesAdapter(this, this.mainActivityVM.getMemoriesList(), BR.rowVM);
+        memoriesAdapter.setmOnRecyclerViewItemClickListener(this);
+        this.contentMainBinding.recyclerView.setAdapter(memoriesAdapter);
+        this.mainActivityVM.setMemoriesAdapter(memoriesAdapter);
+    }
+
+    @Override
+    public void onItemClick(Memory memory, int position) {
+        if (memory == null) {
+            return;
+        }
+        this.navigator.goToDetailsActivity(gson.toJson(memory));
+    }
+
+    @Override
+    public void onRequestComplete() {
+        this.contentMainBinding.progress.setVisibility(View.GONE);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if (this.mainActivityVM != null) {
+            this.mainActivityVM.subscribeObserver(null);
+        }
     }
 }

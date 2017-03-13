@@ -1,9 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.jpp.memories.ui.DetailsMemoryActivity">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-</android.support.constraint.ConstraintLayout>
+    <data>
+
+        <variable
+            name="detailsVM"
+            type="com.jpp.memories.ui.vm.DetailsActivityVM" />
+    </data>
+
+    <RelativeLayout xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.jpp.memories.ui.DetailsMemoryActivity">
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            android:src="@{detailsVM.image}" />
+
+        <Button
+            android:id="@+id/share_button"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/colorPrimary"
+            android:drawablePadding="20dp"
+            android:onClick="@{() -> detailsVM.onShareClick()}"
+            android:text="@string/share"
+            android:textAllCaps="true"
+            android:textColor="@android:color/white" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@id/share_button"
+            android:layout_below="@id/image"
+            android:layout_margin="10dp"
+            android:ellipsize="end"
+            android:gravity="center_horizontal|center_vertical"
+            android:text="@{detailsVM.quote}"
+            android:textColor="@color/secondaryText"
+            android:textSize="20sp"
+            android:textStyle="italic" />
+    </RelativeLayout>
+</layout>

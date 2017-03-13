@@ -5,6 +5,7 @@ import android.content.res.Resources;
 
 import com.google.gson.Gson;
 import com.jpp.memories.core.MemoriesManager;
+import com.jpp.memories.ui.DetailsMemoryActivity;
 import com.jpp.memories.ui.MainActivity;
 import com.jpp.memories.ui.SplashActivity;
 
@@ -25,6 +26,8 @@ public interface ApplicationComponent {
     void inject(SplashActivity activity);
 
     void inject(MainActivity activity);
+
+    void inject(DetailsMemoryActivity activity);
 
     Context provideContext();
 
