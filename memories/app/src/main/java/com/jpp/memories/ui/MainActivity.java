@@ -14,6 +14,8 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.afollestad.materialdialogs.GravityEnum;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.gson.Gson;
 import com.jpp.memories.BR;
 import com.jpp.memories.MemoriesApplication;
@@ -27,6 +29,7 @@ import com.jpp.memories.model.Memory;
 import com.jpp.memories.ui.adapter.MemoriesAdapter;
 import com.jpp.memories.ui.vm.CreateActivityVM;
 import com.jpp.memories.ui.vm.MainActivityVM;
+import com.jpp.memories.utils.InternetState;
 
 import javax.inject.Inject;
 
@@ -53,10 +56,24 @@ public class MainActivity extends AppCompatActivity implements MemoriesAdapter.O
         this.activityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         this.contentMainBinding = activityMainBinding.content;
         this.navigator = new Navigator(this);
-        this.mainActivityVM = new MainActivityVM(this.navigator, this.resources, this.memoriesManager);
+        this.mainActivityVM = new MainActivityVM(this.navigator, this.memoriesManager);
         this.mainActivityVM.subscribeObserver(this);
         this.activityMainBinding.setMainVM(this.mainActivityVM);
         init();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (!InternetState.isNetworkConnected(this)) {
+            new MaterialDialog.Builder(this)
+                    .title(R.string.internet_connection_title)
+                    .content(R.string.internet_connection_text)
+                    .contentGravity(GravityEnum.CENTER)
+                    .canceledOnTouchOutside(false)
+                    .cancelable(false)
+                    .show();
+        }
     }
 
     private void init() {
@@ -67,6 +84,7 @@ public class MainActivity extends AppCompatActivity implements MemoriesAdapter.O
         memoriesAdapter.setmOnRecyclerViewItemClickListener(this);
         this.contentMainBinding.recyclerView.setAdapter(memoriesAdapter);
         this.mainActivityVM.setMemoriesAdapter(memoriesAdapter);
+        this.mainActivityVM.insertLocalMemories();
     }
 
     @Override

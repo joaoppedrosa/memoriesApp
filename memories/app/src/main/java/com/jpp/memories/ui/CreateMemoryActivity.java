@@ -36,7 +36,6 @@ public class CreateMemoryActivity extends AppCompatActivity implements CreateAct
     @Inject
     Gson gson;
 
-    private Uri imageUri;
     private CreateActivityVM createActivityVM;
 
     @Override
@@ -44,7 +43,7 @@ public class CreateMemoryActivity extends AppCompatActivity implements CreateAct
         super.onCreate(savedInstanceState);
         MemoriesApplication.getApplicationComponent().inject(this);
         ActivityCreateMemoryBinding activityCreateMemoryBinding = DataBindingUtil.setContentView(this, R.layout.activity_create_memory);
-        this.createActivityVM = new CreateActivityVM(new Navigator(this), gson);
+        this.createActivityVM = new CreateActivityVM(this, new Navigator(this), gson);
         this.createActivityVM.subscribeObserver(this);
         activityCreateMemoryBinding.setCreateVM(this.createActivityVM);
         ActionBar actionBar = getSupportActionBar();
@@ -57,12 +56,13 @@ public class CreateMemoryActivity extends AppCompatActivity implements CreateAct
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CAMERA_PHOTO_INTENT && resultCode == Activity.RESULT_OK) {
-            if (this.imageUri == null) {
+            if (this.createActivityVM.getImageUri() == null) {
                 Toast.makeText(this, getString(R.string.image_error), Toast.LENGTH_LONG).show();
                 return;
             }
 
-            this.createActivityVM.setImage(this.imageUri.toString());
+            String uriPath = this.createActivityVM.getImageUri().toString();
+            this.createActivityVM.setImage(uriPath);
 
         } else {
             Toast.makeText(this, getString(R.string.image_error), Toast.LENGTH_LONG).show();
@@ -97,7 +97,7 @@ public class CreateMemoryActivity extends AppCompatActivity implements CreateAct
         Intent chooserIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         File f = new File(Environment.getExternalStorageDirectory(), "image_" + System.currentTimeMillis() + ".jpg");
         chooserIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
-        this.imageUri = Uri.fromFile(f);
+        this.createActivityVM.setImageUri(Uri.fromFile(f));
         startActivityForResult(chooserIntent, CAMERA_PHOTO_INTENT);
     }
 

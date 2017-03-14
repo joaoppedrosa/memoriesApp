@@ -46,15 +46,9 @@
 
         <Button
             android:id="@+id/share_button"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_alignParentBottom="true"
-            android:background="@color/colorPrimary"
-            android:drawablePadding="20dp"
+            style="@style/AppTheme.BottomButton"
             android:onClick="@{() -> createVM.onSave()}"
-            android:text="@string/save"
-            android:textAllCaps="true"
-            android:textColor="@android:color/white" />
+            android:text="@string/save" />
 
         <EditText
             android:layout_width="match_parent"

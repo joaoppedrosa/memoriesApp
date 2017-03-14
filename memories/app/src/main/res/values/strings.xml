@@ -12,4 +12,8 @@
     <string name="take_a_picture">Take a picture</string>
     <string name="create_memory">Create Memory</string>
     <string name="memory_details">Memory Details</string>
+    <string name="error_no_picture">Please take a picture</string>
+    <string name="error_no_quote">Please insert a quote or memory</string>
+    <string name="internet_connection_title">Internet Connection</string>
+    <string name="internet_connection_text">Please check your internet connection</string>
 </resources>

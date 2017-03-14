@@ -19,11 +19,6 @@ import rx.schedulers.Schedulers;
 
 public class MemoriesManager {
 
-
-    public MemoriesManager() {
-
-    }
-
     public void getMemories(final APICallback<Memories> memoriesAPICallback) {
         Observable<Memories> memoriesObservable = MemoriesAPI.getClient().getMemories(Constants.GETTY_IMAGE_API_KEY, Constants.QUERY_KEY);
         memoriesObservable

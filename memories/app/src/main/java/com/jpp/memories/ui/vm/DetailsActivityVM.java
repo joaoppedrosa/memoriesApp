@@ -18,9 +18,9 @@ import com.jpp.memories.model.Memory;
 import java.lang.ref.WeakReference;
 
 /**
+ *
  * @author João Pedro Pedrosa, memories on 13-03-2017.
  */
-
 public class DetailsActivityVM {
 
     private Resources resources;
@@ -29,6 +29,12 @@ public class DetailsActivityVM {
     public ObservableField<String> quote;
     public ObservableField<String> image;
 
+    /**
+     * Instantiates a new Details activity vm.
+     *
+     * @param resources the resources
+     * @param navigator the navigator
+     */
     public DetailsActivityVM(@NonNull Resources resources, @NonNull Navigator navigator) {
         this.resources = resources;
         this.navigator = navigator;
@@ -36,6 +42,11 @@ public class DetailsActivityVM {
         this.image = new ObservableField<>();
     }
 
+    /**
+     * Update view
+     *
+     * @param memory the memory
+     */
     public void update(Memory memory) {
         this.quote.set(String.format(this.resources.getString(R.string.quote_style), memory.getQuote()));
         this.image.set(memory.getImage());
@@ -43,15 +54,11 @@ public class DetailsActivityVM {
         this.image.notifyChange();
     }
 
+    /**
+     * On share memory
+     */
     public void onShareClick() {
-        Uri uri;
-        if (URLUtil.isValidUrl(this.image.get())) {
-            uri = Uri.parse(this.image.get());
-        } else {
-            //from local storage
-            uri = Uri.parse(this.image.get());
-        }
-
+        Uri uri = Uri.parse(this.image.get());
         this.navigator.shareMemory(uri, this.quote.get());
     }
 }

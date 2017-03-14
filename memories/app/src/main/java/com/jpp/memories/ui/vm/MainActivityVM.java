@@ -1,6 +1,5 @@
 package com.jpp.memories.ui.vm;
 
-import android.content.res.Resources;
 import android.databinding.BaseObservable;
 import android.databinding.ObservableArrayList;
 import android.databinding.ObservableList;
@@ -14,6 +13,7 @@ import com.jpp.memories.model.Image;
 import com.jpp.memories.model.Memories;
 import com.jpp.memories.model.Memory;
 import com.jpp.memories.ui.adapter.MemoriesAdapter;
+import com.jpp.memories.utils.PreferencesManager;
 
 import java.util.List;
 
@@ -21,42 +21,28 @@ import static com.jpp.memories.utils.LogUtils.debug;
 import static com.jpp.memories.utils.LogUtils.error;
 
 /**
+ * The type Main activity vm.
+ *
  * @author João Pedro Pedrosa, memories on 13-03-2017.
  */
-
 public class MainActivityVM extends BaseObservable implements APICallback<Memories> {
 
+    private PreferencesManager preferencesManager = PreferencesManager.getPreferencesManager();
     private MemoriesAdapter memoriesAdapter;
     private Navigator navigator;
-    private MemoriesManager memoriesManager;
-    private Resources resources;
     private IMainObserver mainObserver;
-    private ObservableList<Memory> memoriesList;
+    public ObservableList<Memory> memoriesList;
 
-    public MainActivityVM(@NonNull Navigator navigator, @NonNull Resources resources, @NonNull MemoriesManager memoriesManager) {
+    /**
+     * Instantiates a new Main activity vm.
+     *
+     * @param navigator       the navigator
+     * @param memoriesManager the memories manager
+     */
+    public MainActivityVM(@NonNull Navigator navigator, @NonNull MemoriesManager memoriesManager) {
         this.navigator = navigator;
-        this.resources = resources;
-        this.memoriesManager = memoriesManager;
         this.memoriesList = new ObservableArrayList<>();
-        this.memoriesManager.getMemories(this);
-    }
-
-    public void addMemory(Memory memory) {
-        if (memory == null) {
-            return;
-        }
-
-        this.memoriesList.add(0, memory);
-        this.memoriesAdapter.notifyDataSetChanged();
-        notifyPropertyChanged(BR.mainVM);
-    }
-
-    public void onCreateMemoriesClick() {
-        this.navigator.goToCreateMemoriesActivity();
-    }
-
-    public void clearList() {
-        this.memoriesList.clear();
+        memoriesManager.getMemories(this);
     }
 
     private void setMemoriesList(List<Image> memoriesList) {
@@ -100,19 +86,77 @@ public class MainActivityVM extends BaseObservable implements APICallback<Memori
         debug("onComplete");
     }
 
+    /**
+     * Insert memories that are save localy
+     */
+    public void insertLocalMemories() {
+        List<Memory> memoryList = this.preferencesManager.getMemories();
+        if (memoryList == null) {
+            return;
+        }
+
+        this.memoriesList.addAll(memoryList);
+        this.memoriesAdapter.notifyDataSetChanged();
+        notifyPropertyChanged(BR.mainVM);
+    }
+
+    /**
+     * Add memory.
+     *
+     * @param memory the memory
+     */
+    public void addMemory(Memory memory) {
+        if (memory == null) {
+            return;
+        }
+
+        this.preferencesManager.insertMemory(memory);
+        this.memoriesList.add(0, memory);
+        this.memoriesAdapter.notifyDataSetChanged();
+        notifyPropertyChanged(BR.mainVM);
+    }
+
+    /**
+     * On create memories click.
+     */
+    public void onCreateMemoriesClick() {
+        this.navigator.goToCreateMemoriesActivity();
+    }
+
+    /**
+     * Gets memories list.
+     *
+     * @return the memories list
+     */
     public ObservableList<Memory> getMemoriesList() {
         return memoriesList;
     }
 
+    /**
+     * Sets memories adapter.
+     *
+     * @param memoriesAdapter the memories adapter
+     */
     public void setMemoriesAdapter(MemoriesAdapter memoriesAdapter) {
         this.memoriesAdapter = memoriesAdapter;
     }
 
+    /**
+     * Subscribe observer.
+     *
+     * @param mainObserver the main observer
+     */
     public void subscribeObserver(IMainObserver mainObserver) {
         this.mainObserver = mainObserver;
     }
 
+    /**
+     * The interface Main observer.
+     */
     public interface IMainObserver {
+        /**
+         * On request complete.
+         */
         void onRequestComplete();
     }
 }

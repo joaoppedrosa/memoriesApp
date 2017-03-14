@@ -17,22 +17,16 @@
             android:id="@+id/image"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:background="@drawable/image_create"
             android:adjustViewBounds="true"
+            android:background="@drawable/image_create"
             android:scaleType="centerCrop"
             android:src="@{detailsVM.image}" />
 
         <Button
             android:id="@+id/share_button"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_alignParentBottom="true"
-            android:background="@color/colorPrimary"
-            android:drawablePadding="20dp"
+            style="@style/AppTheme.BottomButton"
             android:onClick="@{() -> detailsVM.onShareClick()}"
-            android:text="@string/share"
-            android:textAllCaps="true"
-            android:textColor="@android:color/white" />
+            android:text="@string/share" />
 
         <TextView
             android:layout_width="match_parent"
