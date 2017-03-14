@@ -1,9 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.jpp.memories.ui.CreateMemoryActivity">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-</android.support.constraint.ConstraintLayout>
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="createVM"
+            type="com.jpp.memories.ui.vm.CreateActivityVM" />
+    </data>
+
+    <RelativeLayout xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.jpp.memories.ui.CreateMemoryActivity">
+
+        <RelativeLayout
+            android:id="@+id/image_parent"
+            android:layout_width="match_parent"
+            android:layout_height="200dp">
+
+            <ImageView
+                android:id="@+id/image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:adjustViewBounds="true"
+                android:background="@drawable/image_create"
+                android:onClick="@{() -> createVM.onCapture()}"
+                android:scaleType="centerCrop"
+                android:src="@{createVM.image}" />
+
+            <TextView
+                android:id="@+id/image_hint"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:background="@color/black_transparent"
+                android:gravity="center_horizontal|center_vertical"
+                android:text="@string/take_a_picture"
+                android:textColor="@android:color/white"
+                android:textSize="20sp"
+                android:visibility="@{createVM.image == null ? View.VISIBLE : View.GONE}" />
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/share_button"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/colorPrimary"
+            android:drawablePadding="20dp"
+            android:onClick="@{() -> createVM.onSave()}"
+            android:text="@string/save"
+            android:textAllCaps="true"
+            android:textColor="@android:color/white" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@id/share_button"
+            android:layout_below="@id/image_parent"
+            android:layout_margin="10dp"
+            android:background="@drawable/edittext_create"
+            android:ellipsize="end"
+            android:gravity="center_horizontal|center_vertical"
+            android:hint="@string/insert_your_quote_or_memory_here"
+            android:inputType="textMultiLine"
+            android:padding="5dp"
+            android:text="@={createVM.quote}"
+            android:textColor="@color/secondaryText"
+            android:textSize="20sp"
+            android:textStyle="italic" />
+    </RelativeLayout>
+</layout>

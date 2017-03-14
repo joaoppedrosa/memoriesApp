@@ -3,6 +3,7 @@ package com.jpp.memories.ui;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.databinding.DataBindingUtil;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -38,6 +39,10 @@ public class DetailsMemoryActivity extends AppCompatActivity {
         ActivityDetailsMemoryBinding activityDetailsMemoryBinding = DataBindingUtil.setContentView(this, R.layout.activity_details_memory);
         this.detailsActivityVM = new DetailsActivityVM(this.resources, new Navigator(this));
         activityDetailsMemoryBinding.setDetailsVM(this.detailsActivityVM);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle(R.string.memory_details);
+        }
         handleIntent(getIntent());
     }
 

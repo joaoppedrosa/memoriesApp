@@ -38,6 +38,7 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void run() {
                 navigator.goToMainActivity();
+                finish();
             }
         }, SPLASH_TIME);
     }

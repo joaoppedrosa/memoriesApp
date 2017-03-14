@@ -51,7 +51,7 @@ public class Navigator {
         }
 
         Intent intent = new Intent(activity, CreateMemoryActivity.class);
-        startActivity(activity, intent);
+        startActivityForResult(activity, intent, CreateMemoryActivity.MEMORY_CREATE_REQUEST_CODE);
     }
 
     public void goToDetailsActivity(@NonNull String content) {
@@ -69,6 +69,22 @@ public class Navigator {
         bundle.putString(DetailsMemoryActivity.BUNDLE_MEMORY, content);
         intent.putExtras(bundle);
         startActivity(activity, intent);
+    }
+
+    public void goToMainWithResult(@NonNull String result){
+        if (this.activityWeakReference == null) {
+            return;
+        }
+
+        Activity activity = this.activityWeakReference.get();
+        if (activity == null) {
+            return;
+        }
+
+        Intent intent = new Intent();
+        intent.putExtra(CreateMemoryActivity.BUNDLE_MEMORY_CREATE,result);
+        activity.setResult(Activity.RESULT_OK, intent);
+        activity.finish();
     }
 
     public void shareMemory(@NonNull Uri image, @NonNull String text) {
@@ -90,6 +106,11 @@ public class Navigator {
 
     private void startActivity(@NonNull Activity activity, @NonNull Intent intent) {
         activity.startActivity(intent);
+        activity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+    }
+
+    private void startActivityForResult(@NonNull Activity activity, @NonNull Intent intent, int requestCode) {
+        activity.startActivityForResult(intent, requestCode);
         activity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 }

@@ -6,4 +6,10 @@
     <string name="error_server">Please try again later…</string>
     <string name="share">Share</string>
     <string name="quote_style">\"%1$s\"</string>
+    <string name="image_error">Error while capturing Image</string>
+    <string name="save">Save</string>
+    <string name="insert_your_quote_or_memory_here">Insert your quote or memory here…</string>
+    <string name="take_a_picture">Take a picture</string>
+    <string name="create_memory">Create Memory</string>
+    <string name="memory_details">Memory Details</string>
 </resources>

@@ -41,6 +41,16 @@ public class MainActivityVM extends BaseObservable implements APICallback<Memori
         this.memoriesManager.getMemories(this);
     }
 
+    public void addMemory(Memory memory) {
+        if (memory == null) {
+            return;
+        }
+
+        this.memoriesList.add(0, memory);
+        this.memoriesAdapter.notifyDataSetChanged();
+        notifyPropertyChanged(BR.mainVM);
+    }
+
     public void onCreateMemoriesClick() {
         this.navigator.goToCreateMemoriesActivity();
     }

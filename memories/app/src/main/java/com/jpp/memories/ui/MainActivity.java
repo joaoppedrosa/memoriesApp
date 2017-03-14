@@ -1,5 +1,7 @@
 package com.jpp.memories.ui;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -23,6 +25,7 @@ import com.jpp.memories.databinding.ContentMainBinding;
 import com.jpp.memories.model.Memories;
 import com.jpp.memories.model.Memory;
 import com.jpp.memories.ui.adapter.MemoriesAdapter;
+import com.jpp.memories.ui.vm.CreateActivityVM;
 import com.jpp.memories.ui.vm.MainActivityVM;
 
 import javax.inject.Inject;
@@ -82,9 +85,23 @@ public class MainActivity extends AppCompatActivity implements MemoriesAdapter.O
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
         if (this.mainActivityVM != null) {
             this.mainActivityVM.subscribeObserver(null);
+        }
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == CreateMemoryActivity.MEMORY_CREATE_REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                String result = data.getStringExtra(CreateMemoryActivity.BUNDLE_MEMORY_CREATE);
+                if (result == null) {
+                    return;
+                }
+                Memory memory = this.gson.fromJson(result, Memory.class);
+                this.mainActivityVM.addMemory(memory);
+            }
         }
     }
 }

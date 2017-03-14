@@ -43,15 +43,6 @@ public class DetailsActivityVM {
         this.image.notifyChange();
     }
 
-    @BindingAdapter({"android:src"})
-    public static void setImageViewResource(ImageView imageView, String image) {
-        Glide.with(imageView.getContext())
-                .load(image)
-                .placeholder(R.drawable.placeholder)
-                .fitCenter()
-                .into(imageView);
-    }
-
     public void onShareClick() {
         Uri uri;
         if (URLUtil.isValidUrl(this.image.get())) {
