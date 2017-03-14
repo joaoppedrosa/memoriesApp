@@ -15,17 +15,25 @@ import com.jpp.memories.ui.vm.DetailsActivityVM;
 import java.lang.ref.WeakReference;
 
 /**
+ *
  * @author João Pedro Pedrosa, memories on 13-03-2017.
  */
-
 public class Navigator {
 
     private WeakReference<Activity> activityWeakReference;
 
+    /**
+     * Instantiates a new Navigator.
+     *
+     * @param activity the activity
+     */
     public Navigator(@NonNull Activity activity) {
         this.activityWeakReference = new WeakReference<>(activity);
     }
 
+    /**
+     * Go to main activity.
+     */
     public void goToMainActivity() {
         if (this.activityWeakReference == null) {
             return;
@@ -40,6 +48,9 @@ public class Navigator {
         activity.startActivity(intent);
     }
 
+    /**
+     * Go to create memories activity.
+     */
     public void goToCreateMemoriesActivity() {
         if (this.activityWeakReference == null) {
             return;
@@ -54,6 +65,11 @@ public class Navigator {
         startActivityForResult(activity, intent, CreateMemoryActivity.MEMORY_CREATE_REQUEST_CODE);
     }
 
+    /**
+     * Go to details activity.
+     *
+     * @param content the content
+     */
     public void goToDetailsActivity(@NonNull String content) {
         if (this.activityWeakReference == null) {
             return;
@@ -71,6 +87,11 @@ public class Navigator {
         startActivity(activity, intent);
     }
 
+    /**
+     * Go to main with result.
+     *
+     * @param result the result
+     */
     public void goToMainWithResult(@NonNull String result){
         if (this.activityWeakReference == null) {
             return;
@@ -87,6 +108,12 @@ public class Navigator {
         activity.finish();
     }
 
+    /**
+     * Share memory.
+     *
+     * @param image the image
+     * @param text  the text
+     */
     public void shareMemory(@NonNull Uri image, @NonNull String text) {
         if (this.activityWeakReference == null) {
             return;

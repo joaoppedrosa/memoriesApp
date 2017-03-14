@@ -14,11 +14,16 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
+ *
  * @author João Pedro Pedrosa, memories on 13-03-2017.
  */
-
 public class MemoriesManager {
 
+    /**
+     * Gets memories.
+     *
+     * @param memoriesAPICallback the memories api callback
+     */
     public void getMemories(final APICallback<Memories> memoriesAPICallback) {
         Observable<Memories> memoriesObservable = MemoriesAPI.getClient().getMemories(Constants.GETTY_IMAGE_API_KEY, Constants.QUERY_KEY);
         memoriesObservable
