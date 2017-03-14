@@ -2,6 +2,10 @@
 
 App for saving and sharing memories, built with an [MVVM](https://labs.ribot.co.uk/approaching-android-with-mvvm-8ceec02d5442#.yh4qv552g) approach
 
+## API
+
+* [Getty Images API](http://developers.gettyimages.com/pt/trytheapi.html?)
+
 ## Dependencies
 
 **CORE**
@@ -17,3 +21,7 @@ A Java serialization/deserialization library that can convert Java Objects into 
 Dependency Injection
 * [Glide](https://github.com/bumptech/glide)
 An image loading and caching library for Android
+* [Material Dialogs](https://github.com/afollestad/material-dialogs)
+A beautiful, fluid, and customizable dialogs API.
+* [Mockito](http://site.mockito.org/)
+Mocking framework for unit tests in Java
