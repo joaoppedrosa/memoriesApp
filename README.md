@@ -8,7 +8,6 @@ App for saving and sharing memories, built with an [MVVM](https://labs.ribot.co.
 
 ## Dependencies
 
-**CORE**
 * [Data binding](https://developer.android.com/topic/libraries/data-binding/index.html)
 Data Binding Library to write declarative layouts and minimize the glue code necessary to bind your application logic and layouts.
 * [RxJava & RxAndroid](https://github.com/ReactiveX/RxAndroid)
