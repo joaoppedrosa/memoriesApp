@@ -9,6 +9,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.jpp.memories.core.MemoriesManager;
 import com.jpp.memories.utils.Constants;
+import com.jpp.memories.utils.PreferencesManager;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -93,7 +94,13 @@ public class ApplicationModule {
 
     @Provides
     @Singleton
-    MemoriesManager provideMemoriesManager() {
-        return new MemoriesManager();
+    PreferencesManager providePreferencesManager(@NonNull Context context, @NonNull Gson gson){
+        return new PreferencesManager(context, gson);
+    }
+
+    @Provides
+    @Singleton
+    MemoriesManager provideMemoriesManager(@NonNull PreferencesManager preferencesManager) {
+        return new MemoriesManager(preferencesManager);
     }
 }

@@ -9,6 +9,7 @@ import com.jpp.memories.ui.CreateMemoryActivity;
 import com.jpp.memories.ui.DetailsMemoryActivity;
 import com.jpp.memories.ui.MainActivity;
 import com.jpp.memories.ui.SplashActivity;
+import com.jpp.memories.utils.PreferencesManager;
 
 import javax.inject.Singleton;
 
@@ -43,4 +44,6 @@ public interface ApplicationComponent {
     OkHttpClient provideOkHttpClient();
 
     MemoriesManager provideMemoriesManager();
+
+    PreferencesManager providePreferencesManager();
 }

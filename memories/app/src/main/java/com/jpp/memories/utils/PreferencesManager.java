@@ -2,6 +2,7 @@ package com.jpp.memories.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.annotation.NonNull;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -20,17 +21,12 @@ public class PreferencesManager {
     private static final String PREFERENCES_NAME = "com.jpp.memories";
     private static final String MEMORIES_KEY_VALUE = "memories";
 
-
     private final SharedPreferences mPref;
     private final Gson gson;
 
-    private PreferencesManager() {
-        this.gson = MemoriesApplication.getApplicationComponent().provideGSON();
-        this.mPref = MemoriesApplication.getApplicationComponent().provideContext().getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE);
-    }
-
-    public static PreferencesManager getPreferencesManager() {
-        return new PreferencesManager();
+    public PreferencesManager(@NonNull Context context, @NonNull Gson gson) {
+        this.gson = gson;
+        this.mPref = context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE);
     }
 
     public List<Memory> getMemories() {

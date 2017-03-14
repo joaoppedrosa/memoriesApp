@@ -27,7 +27,7 @@ import static com.jpp.memories.utils.LogUtils.error;
  */
 public class MainActivityVM extends BaseObservable implements APICallback<Memories> {
 
-    private PreferencesManager preferencesManager = PreferencesManager.getPreferencesManager();
+    private MemoriesManager memoriesManager;
     private MemoriesAdapter memoriesAdapter;
     private Navigator navigator;
     private IMainObserver mainObserver;
@@ -40,9 +40,10 @@ public class MainActivityVM extends BaseObservable implements APICallback<Memori
      * @param memoriesManager the memories manager
      */
     public MainActivityVM(@NonNull Navigator navigator, @NonNull MemoriesManager memoriesManager) {
+        this.memoriesManager = memoriesManager;
         this.navigator = navigator;
         this.memoriesList = new ObservableArrayList<>();
-        memoriesManager.getMemories(this);
+        this.memoriesManager.getMemories(this);
     }
 
     private void setMemoriesList(List<Image> memoriesList) {
@@ -90,13 +91,15 @@ public class MainActivityVM extends BaseObservable implements APICallback<Memori
      * Insert memories that are save localy
      */
     public void insertLocalMemories() {
-        List<Memory> memoryList = this.preferencesManager.getMemories();
+        List<Memory> memoryList = this.memoriesManager.getMemories();
         if (memoryList == null) {
             return;
         }
 
         this.memoriesList.addAll(memoryList);
-        this.memoriesAdapter.notifyDataSetChanged();
+        if (this.memoriesAdapter != null) {
+            this.memoriesAdapter.notifyDataSetChanged();
+        }
         notifyPropertyChanged(BR.mainVM);
     }
 
@@ -110,9 +113,12 @@ public class MainActivityVM extends BaseObservable implements APICallback<Memori
             return;
         }
 
-        this.preferencesManager.insertMemory(memory);
+        this.memoriesManager.saveMemory(memory);
         this.memoriesList.add(0, memory);
-        this.memoriesAdapter.notifyDataSetChanged();
+
+        if (this.memoriesAdapter != null) {
+            this.memoriesAdapter.notifyDataSetChanged();
+        }
         notifyPropertyChanged(BR.mainVM);
     }
 
