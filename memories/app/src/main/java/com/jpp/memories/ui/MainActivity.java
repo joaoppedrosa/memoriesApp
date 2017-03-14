@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.gson.Gson;
@@ -62,20 +64,6 @@ public class MainActivity extends AppCompatActivity implements MemoriesAdapter.O
         init();
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        if (!InternetState.isNetworkConnected(this)) {
-            new MaterialDialog.Builder(this)
-                    .title(R.string.internet_connection_title)
-                    .content(R.string.internet_connection_text)
-                    .contentGravity(GravityEnum.CENTER)
-                    .canceledOnTouchOutside(false)
-                    .cancelable(false)
-                    .show();
-        }
-    }
-
     private void init() {
         setSupportActionBar(this.activityMainBinding.toolbar);
         this.contentMainBinding.recyclerView.setHasFixedSize(true);
@@ -85,6 +73,28 @@ public class MainActivity extends AppCompatActivity implements MemoriesAdapter.O
         this.contentMainBinding.recyclerView.setAdapter(memoriesAdapter);
         this.mainActivityVM.setMemoriesAdapter(memoriesAdapter);
         this.mainActivityVM.insertLocalMemories();
+        checkInternetState();
+    }
+
+    private void checkInternetState() {
+        if (!InternetState.isNetworkConnected(this)) {
+            new MaterialDialog.Builder(this)
+                    .title(R.string.internet_connection_title)
+                    .content(R.string.internet_connection_text)
+                    .negativeText(android.R.string.cancel)
+                    .onNegative(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            if (contentMainBinding != null) {
+                                contentMainBinding.progress.setVisibility(View.GONE);
+                            }
+                        }
+                    })
+                    .contentGravity(GravityEnum.CENTER)
+                    .canceledOnTouchOutside(false)
+                    .cancelable(false)
+                    .show();
+        }
     }
 
     @Override

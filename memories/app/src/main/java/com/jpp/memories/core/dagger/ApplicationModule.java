@@ -94,7 +94,7 @@ public class ApplicationModule {
 
     @Provides
     @Singleton
-    PreferencesManager providePreferencesManager(@NonNull Context context, @NonNull Gson gson){
+    PreferencesManager providePreferencesManager(@NonNull Context context, @NonNull Gson gson) {
         return new PreferencesManager(context, gson);
     }
 

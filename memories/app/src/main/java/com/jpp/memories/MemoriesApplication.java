@@ -10,7 +10,7 @@ import com.jpp.memories.core.dagger.DaggerApplicationComponent;
  * @author João Pedro Pedrosa, memories on 13-03-2017.
  */
 
-public class MemoriesApplication extends Application{
+public class MemoriesApplication extends Application {
 
     private static ApplicationComponent applicationComponent;
 
@@ -27,6 +27,7 @@ public class MemoriesApplication extends Application{
     public static ApplicationComponent getApplicationComponent() {
         return applicationComponent;
     }
+
     public static void setApplicationComponent(ApplicationComponent appComp) {
         applicationComponent = appComp;
     }
